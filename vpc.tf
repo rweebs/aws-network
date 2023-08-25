@@ -46,7 +46,7 @@ module "vpc-c" {
   version = "5.0.0"
 
   name = "vpc-c"
-  
+
   map_public_ip_on_launch = true
 
   cidr = "10.2.0.0/16"

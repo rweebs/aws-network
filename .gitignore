@@ -1,4 +1,4 @@
 terraform*
 .terraform*
-tf-key-pair
+tf-key-pair*
 .terraform/
