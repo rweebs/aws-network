@@ -11,5 +11,12 @@ aws_secret_access_key=62vwnfFpyEXAMPLE
 ```
 
 ## How to run
-1. ```terraform init```
-2. ```terraform apply -auto-approve```
+1. ```cd vpc```
+2. ```terraform init```
+3. ```terraform apply -auto-approve```
+4. ```cd ..```
+5. ```terraform init```
+6. ```terraform apply -auto-approve```
+
+OR
+```bash run.sh```
