@@ -1,3 +1,11 @@
+# locals {
+#   region = "us-east-1"
+# }
+
+locals {
+  region = "us-west-2"
+}
+
 module "tgw" {
   source  = "terraform-aws-modules/transit-gateway/aws"
   version = "~> 2.0"
@@ -9,8 +17,8 @@ module "tgw" {
 
   vpc_attachments = {
     vpc-a = {
-      vpc_id       = module.vpc-a.vpc_id
-      subnet_ids   = module.vpc-a.public_subnets
+      vpc_id       = data.aws_vpc.vpc-a.id
+      subnet_ids   = data.aws_subnets.sn-vpc-a.ids
       dns_support  = true
       ipv6_support = false
 
@@ -25,8 +33,8 @@ module "tgw" {
       ]
     },
     vpc-b = {
-      vpc_id       = module.vpc-b.vpc_id
-      subnet_ids   = module.vpc-b.public_subnets
+      vpc_id       = data.aws_vpc.vpc-b.id
+      subnet_ids   = data.aws_subnets.sn-vpc-b.ids
       dns_support  = true
       ipv6_support = false
 
@@ -41,8 +49,8 @@ module "tgw" {
       ]
     },
     vpc-c = {
-      vpc_id       = module.vpc-c.vpc_id
-      subnet_ids   = module.vpc-c.public_subnets
+      vpc_id       = data.aws_vpc.vpc-c.id
+      subnet_ids   = data.aws_subnets.sn-vpc-c.ids
       dns_support  = true
       ipv6_support = false
 
@@ -69,15 +77,36 @@ module "tgw" {
 }
 
 data "aws_route_tables" "rts-vpc-a" {
-  vpc_id = module.vpc-a.vpc_id
+  vpc_id = data.aws_vpc.vpc-a.id
 }
 
 data "aws_route_tables" "rts-vpc-b" {
-  vpc_id = module.vpc-b.vpc_id
+  vpc_id = data.aws_vpc.vpc-b.id
 }
 
 data "aws_route_tables" "rts-vpc-c" {
-  vpc_id = module.vpc-c.vpc_id
+  vpc_id = data.aws_vpc.vpc-c.id
+}
+
+data "aws_subnets" "sn-vpc-a" {
+    filter {
+        name = "vpc-id"
+        values = [data.aws_vpc.vpc-a.id]
+    }
+}
+
+data "aws_subnets" "sn-vpc-b" {
+    filter {
+        name = "vpc-id"
+        values = [data.aws_vpc.vpc-b.id]
+    }
+}
+
+data "aws_subnets" "sn-vpc-c" {
+    filter {
+        name = "vpc-id"
+        values = [data.aws_vpc.vpc-c.id]
+    }
 }
 
 resource "aws_route" "vpc-a_to_tgw" {
@@ -85,7 +114,7 @@ resource "aws_route" "vpc-a_to_tgw" {
   route_table_id            = tolist(data.aws_route_tables.rts-vpc-a.ids)[count.index]
   destination_cidr_block    = "10.0.0.0/8"
   transit_gateway_id = module.tgw.ec2_transit_gateway_id
-  depends_on                = [module.vpc-a, module.vpc-b, module.vpc-c]
+  depends_on                = [data.aws_vpc.vpc-a, data.aws_vpc.vpc-b, data.aws_vpc.vpc-c]
 }
 
 resource "aws_route" "vpc-b_to_tgw" {
@@ -93,7 +122,7 @@ resource "aws_route" "vpc-b_to_tgw" {
   route_table_id            = tolist(data.aws_route_tables.rts-vpc-b.ids)[count.index]
   destination_cidr_block    = "10.0.0.0/8"
   transit_gateway_id = module.tgw.ec2_transit_gateway_id
-  depends_on                = [module.vpc-a, module.vpc-b, module.vpc-c]
+  depends_on                = [data.aws_vpc.vpc-a, data.aws_vpc.vpc-b, data.aws_vpc.vpc-c]
 }
 
 resource "aws_route" "vpc-c_to_tgw" {
@@ -101,5 +130,5 @@ resource "aws_route" "vpc-c_to_tgw" {
   route_table_id            = tolist(data.aws_route_tables.rts-vpc-c.ids)[count.index]
   destination_cidr_block    = "10.0.0.0/8"
   transit_gateway_id = module.tgw.ec2_transit_gateway_id
-  depends_on                = [module.vpc-a, module.vpc-b, module.vpc-c]
+  depends_on                = [data.aws_vpc.vpc-a, data.aws_vpc.vpc-b, data.aws_vpc.vpc-c]
 }
