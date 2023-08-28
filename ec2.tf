@@ -19,6 +19,14 @@ resource "aws_security_group" "allow_ssh_a" {
     cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
   }
 
+  #Incoming traffic
+  ingress {
+    from_port   = 33434
+    to_port     = 33436
+    protocol    = "udp"
+    cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
+  }
+
   #Outgoing traffic
   egress {
     from_port   = 0
@@ -45,6 +53,14 @@ resource "aws_security_group" "allow_ssh_b" {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
+    cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
+  }
+
+  #Incoming traffic
+  ingress {
+    from_port   = 33434
+    to_port     = 33436
+    protocol    = "udp"
     cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
   }
 
@@ -77,6 +93,14 @@ resource "aws_security_group" "allow_ssh_c" {
     cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
   }
 
+  #Incoming traffic
+  ingress {
+    from_port   = 33434
+    to_port     = 33436
+    protocol    = "udp"
+    cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
+  }
+  
   #Outgoing traffic
   egress {
     from_port   = 0
