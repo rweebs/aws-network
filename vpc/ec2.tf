@@ -1,7 +1,3 @@
-locals {
-  region = "ap-southeast-1"
-}
-
 resource "aws_security_group" "allow_ssh_a" {
   name   = "allow_ssh_vpc_a"
   vpc_id = module.vpc-a.vpc_id
@@ -114,7 +110,7 @@ resource "aws_security_group" "allow_ssh_c" {
 }
 
 resource "aws_instance" "ec2-vpc-a" {
-  ami               = "ami-002c2b8d1f5b1eb47"
+  ami               = local.ami
   instance_type     = "t3.micro"
   availability_zone = local.azs[0]
   key_name          = "tf-key-pair"
@@ -126,7 +122,7 @@ resource "aws_instance" "ec2-vpc-a" {
 }
 
 resource "aws_instance" "ec2-vpc-b" {
-  ami               = "ami-002c2b8d1f5b1eb47"
+  ami               = local.ami
   instance_type     = "t3.micro"
   availability_zone = local.azs[0]
   key_name          = "tf-key-pair"
@@ -138,7 +134,7 @@ resource "aws_instance" "ec2-vpc-b" {
 }
 
 resource "aws_instance" "ec2-vpc-c" {
-  ami               = "ami-002c2b8d1f5b1eb47"
+  ami               = local.ami
   instance_type     = "t3.micro"
   availability_zone = local.azs[0]
   key_name          = "tf-key-pair"

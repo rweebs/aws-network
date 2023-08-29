@@ -1,6 +1,7 @@
 locals {
   region = "ap-southeast-1"
   azs = ["ap-southeast-1a", "ap-southeast-1b"]
+  ami = "ami-0464f90f5928bccb8"
 }
 
 
