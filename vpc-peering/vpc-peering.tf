@@ -1,9 +1,6 @@
-# locals {
-#   region = "us-east-1"
-# }
 
 locals {
-  region = "us-west-2"
+  region = "ap-southeast-1"
 }
 
 resource "aws_vpc_peering_connection" "vpc_a_to_vpc_b" {

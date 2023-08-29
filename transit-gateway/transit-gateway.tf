@@ -1,10 +1,9 @@
-# locals {
-#   region = "us-east-1"
-# }
 
 locals {
-  region = "us-west-2"
+  region = "ap-southeast-1"
+  azs = ["ap-southeast-1a", "ap-southeast-1b"]
 }
+
 
 module "tgw" {
   source  = "terraform-aws-modules/transit-gateway/aws"
