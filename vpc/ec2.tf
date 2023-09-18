@@ -1,4 +1,3 @@
-
 resource "aws_security_group" "allow_ssh_a" {
   name   = "allow_ssh_vpc_a"
   vpc_id = module.vpc-a.vpc_id
@@ -16,6 +15,14 @@ resource "aws_security_group" "allow_ssh_a" {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
+    cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
+  }
+
+  #Incoming traffic
+  ingress {
+    from_port   = 33434
+    to_port     = 33436
+    protocol    = "udp"
     cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
   }
 
@@ -48,6 +55,14 @@ resource "aws_security_group" "allow_ssh_b" {
     cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
   }
 
+  #Incoming traffic
+  ingress {
+    from_port   = 33434
+    to_port     = 33436
+    protocol    = "udp"
+    cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
+  }
+
   #Outgoing traffic
   egress {
     from_port   = 0
@@ -77,6 +92,14 @@ resource "aws_security_group" "allow_ssh_c" {
     cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
   }
 
+  #Incoming traffic
+  ingress {
+    from_port   = 33434
+    to_port     = 33436
+    protocol    = "udp"
+    cidr_blocks = ["10.0.0.0/16", "10.1.0.0/16", "10.2.0.0/16"] #replace it with your ip address
+  }
+
   #Outgoing traffic
   egress {
     from_port   = 0
@@ -86,11 +109,10 @@ resource "aws_security_group" "allow_ssh_c" {
   }
 }
 
-
 resource "aws_instance" "ec2-vpc-a" {
-  ami               = "ami-08a52ddb321b32a8c"
+  ami               = local.ami
   instance_type     = "t3.micro"
-  availability_zone = "us-east-1a"
+  availability_zone = local.azs[0]
   key_name          = "tf-key-pair"
   subnet_id         = module.vpc-a.public_subnets[0]
   security_groups   = [aws_security_group.allow_ssh_a.id]
@@ -100,9 +122,9 @@ resource "aws_instance" "ec2-vpc-a" {
 }
 
 resource "aws_instance" "ec2-vpc-b" {
-  ami               = "ami-08a52ddb321b32a8c"
+  ami               = local.ami
   instance_type     = "t3.micro"
-  availability_zone = "us-east-1a"
+  availability_zone = local.azs[0]
   key_name          = "tf-key-pair"
   subnet_id         = module.vpc-b.public_subnets[0]
   security_groups   = [aws_security_group.allow_ssh_b.id]
@@ -112,9 +134,9 @@ resource "aws_instance" "ec2-vpc-b" {
 }
 
 resource "aws_instance" "ec2-vpc-c" {
-  ami               = "ami-08a52ddb321b32a8c"
+  ami               = local.ami
   instance_type     = "t3.micro"
-  availability_zone = "us-east-1a"
+  availability_zone = local.azs[0]
   key_name          = "tf-key-pair"
   subnet_id         = module.vpc-c.public_subnets[0]
   security_groups   = [aws_security_group.allow_ssh_c.id]

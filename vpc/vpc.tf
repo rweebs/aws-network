@@ -1,7 +1,9 @@
 locals {
-  region = "us-east-1"
-  azs    = ["us-east-1a", "us-east-1b"]
+  region = "ap-southeast-1"
+  azs = ["ap-southeast-1a", "ap-southeast-1b"]
+  ami = "ami-0464f90f5928bccb8"
 }
+
 
 module "vpc-a" {
   source  = "terraform-aws-modules/vpc/aws"
